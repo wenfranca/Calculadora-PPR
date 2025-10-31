@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Média Salarial e PPR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-calcular {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-calcular:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-calcular:active {
+            transform: translateY(0);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left-color: #764ba2;
+        }
+
+        .highlight .result-value {
+            color: #764ba2;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-3col, .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Calculadora de Média Salarial e PPR</h1>
+
+        <div class="section">
+            <div class="section-title">Salários dos últimos 6 meses</div>
+            <div class="grid-3col">
+                <div class="input-group">
+                    <label>Salário mês 1 (R$):</label>
+                    <input type="text" id="sal1" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Salário mês 2 (R$):</label>
+                    <input type="text" id="sal2" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Salário mês 3 (R$):</label>
+                    <input type="text" id="sal3" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Salário mês 4 (R$):</label>
+                    <input type="text" id="sal4" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Salário mês 5 (R$):</label>
+                    <input type="text" id="sal5" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Salário mês 6 (R$):</label>
+                    <input type="text" id="sal6" placeholder="0,00">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Parâmetros do PPR</div>
+            <div class="grid-3col">
+                <div class="input-group">
+                    <label>PPR Período (%):</label>
+                    <input type="text" id="ppr" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>Nota do setor (%):</label>
+                    <input type="text" id="nota-setor" placeholder="0,00">
+                </div>
+                <div class="input-group">
+                    <label>APS (máximo 40):</label>
+                    <input type="text" id="aps" placeholder="0,00">
+                </div>
+            </div>
+            <div class="grid-3col">
+                <div class="input-group">
+                    <label>Qtd. de PPR a receber:</label>
+                    <input type="text" id="qtd-ppr" placeholder="1">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-calcular" onclick="calcular()">Calcular</button>
+
+        <div class="section">
+            <div class="section-title">Resultados</div>
+            <div class="result-grid">
+                <div class="result-item">
+                    <div class="result-label">Média salarial:</div>
+                    <div class="result-value" id="media-salarial">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Valor máximo PPR:</div>
+                    <div class="result-value" id="valor-max-ppr">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Valor do setor:</div>
+                    <div class="result-value" id="valor-setor">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">% da nota APS:</div>
+                    <div class="result-value" id="aps-percent">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">% APS ponderado (25%):</div>
+                    <div class="result-value" id="aps-ponderado">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Diferença para 25%:</div>
+                    <div class="result-value" id="aps-diferenca">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Desconto (R$):</div>
+                    <div class="result-value" id="desconto">-</div>
+                </div>
+                <div class="result-item highlight">
+                    <div class="result-label">PPR a receber (R$):</div>
+                    <div class="result-value" id="ppr-receber">-</div>
+                </div>
+                <div class="result-item highlight">
+                    <div class="result-label">Total a receber (R$):</div>
+                    <div class="result-value" id="total-receber">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function parseValor(str) {
+            return parseFloat(str.replace(',', '.'));
+        }
+
+        function formatarMoeda(valor) {
+            return `R$ ${valor.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+        }
+
+        function calcular() {
+            try {
+                // Pegar salários
+                const salarios = [];
+                for (let i = 1; i <= 6; i++) {
+                    const valor = document.getElementById(`sal${i}`).value.replace(',', '.');
+                    if (!valor) throw new Error('Preencha todos os salários');
+                    salarios.push(parseValor(valor));
+                }
+
+                // Calcular média
+                const media = salarios.reduce((a, b) => a + b, 0) / salarios.length;
+                document.getElementById('media-salarial').textContent = formatarMoeda(media);
+
+                // PPR
+                const pprStr = document.getElementById('ppr').value;
+                if (!pprStr) throw new Error('Preencha o PPR');
+                const pprPercent = parseValor(pprStr) / 100;
+                const valorMaxPpr = media * pprPercent;
+                document.getElementById('valor-max-ppr').textContent = formatarMoeda(valorMaxPpr);
+
+                // Nota Setor
+                const notaSetorStr = document.getElementById('nota-setor').value;
+                if (!notaSetorStr) throw new Error('Preencha a nota do setor');
+                const notaSetorPercent = parseValor(notaSetorStr) / 100;
+                const valorSetor = valorMaxPpr * notaSetorPercent;
+                document.getElementById('valor-setor').textContent = formatarMoeda(valorSetor);
+
+                // Nota APS
+                const notaApsStr = document.getElementById('aps').value;
+                if (!notaApsStr) throw new Error('Preencha o APS');
+                const notaAps = parseValor(notaApsStr);
+                if (notaAps < 0 || notaAps > 40) throw new Error('APS deve estar entre 0 e 40');
+                const apsPercent = (notaAps / 40) * 100;
+                document.getElementById('aps-percent').textContent = `${apsPercent.toFixed(2)}%`;
+
+                // APS ponderado (25%)
+                const apsPonderado = apsPercent * 0.25;
+                document.getElementById('aps-ponderado').textContent = `${apsPonderado.toFixed(2)}%`;
+
+                // Diferença para 25%
+                let diferenca = 25 - apsPonderado;
+                if (diferenca < 0) diferenca = 0;
+                document.getElementById('aps-diferenca').textContent = `${diferenca.toFixed(2)}%`;
+
+                // Desconto
+                const desconto = valorMaxPpr * (diferenca / 100);
+                document.getElementById('desconto').textContent = formatarMoeda(desconto);
+
+                // PPR a receber
+                const pprReceber = valorSetor - desconto;
+                document.getElementById('ppr-receber').textContent = formatarMoeda(pprReceber);
+
+                // Quantidade de PPR
+                const qtdPprStr = document.getElementById('qtd-ppr').value;
+                const qtdPpr = qtdPprStr && parseInt(qtdPprStr) > 0 ? parseInt(qtdPprStr) : 1;
+                const totalReceber = pprReceber * qtdPpr;
+                document.getElementById('total-receber').textContent = formatarMoeda(totalReceber);
+
+            } catch (error) {
+                alert(error.message || 'Erro ao calcular. Verifique os valores inseridos.');
+                const resultIds = ['media-salarial', 'valor-max-ppr', 'valor-setor', 'aps-percent', 
+                                  'aps-ponderado', 'aps-diferenca', 'desconto', 'ppr-receber', 'total-receber'];
+                resultIds.forEach(id => document.getElementById(id).textContent = 'Erro');
+            }
+        }
+
+        // Permitir calcular com Enter
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') calcular();
+            });
+        });
+    </script>
+</body>
+</html>
